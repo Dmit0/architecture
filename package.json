@@ -24,7 +24,7 @@
     "ts_server": "nodemon --watch 'src/**/*ts' --exec 'ts-node' src/index.ts",
     "js_server": "nodemon src/index.js",
     "controllers_test": "mocha src/controllers/controllers.test.js",
-    "microservice_tests":"mocha src/microservices/microservices.test.js",
+    "service_tests":"mocha src/services/services.test.js",
     "build": "tsc"
   },
   "author": "",
