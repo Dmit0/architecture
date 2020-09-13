@@ -75,12 +75,12 @@ describe('controllers test',()=>{
             })
 
             test('should validate input data',async()=>{
-                const response = await request.get(route).send({name:''})
+                const response = await request.put(route).send({name:''})
                 expect(response.body).toStrictEqual({message:'invalid data'})
                 expect(mockUserUpdate).not.toBeCalled()
             })
             test('should return a response from service',async()=>{
-                const response = await request.get(route).send({name:'abc'})
+                const response = await request.put(route).send({name:'abc'})
                 expect(mockUserUpdate).toBeCalled()
                 expect(response.status).toBe(201)
             })
@@ -97,12 +97,12 @@ describe('controllers test',()=>{
             })
 
             test('should validate input data',async()=>{
-                const response = await request.get(route).send({name:''})
+                const response = await request.delete(route).send({name:''})
                 expect(response.body).toStrictEqual({message:'invalid data'})
                 expect(mockUserDelete).not.toBeCalled()
             })
             test('should return a response from service',async()=>{
-                const response = await request.get(route).send({name:'abc'})
+                const response = await request.delete(route).send({name:'abc'})
                 expect(mockUserDelete).toBeCalled()
                 expect(response.status).toBe(201)
             })
