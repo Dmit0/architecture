@@ -1,4 +1,4 @@
-const userOperations=require('../microservices/userOperationServise')
+const userOperations=require('../services/userOperationServise')
 const { validationResult } = require('express-validator');
 // interface UserInterface{
 //     name:string,
@@ -26,12 +26,12 @@ module.exports=class UserControllers{
                 age:req.body.age
             }
             const response = await userOperations.userCreate(UserData.name,UserData.age)
-            if(response){
+            if(!response){
                 throw new Error('error')
             }else 
             res.status(201).send('user was created') 
         }catch(e){
-            res.send(e.message)
+            res.status(400).send({message:e.message})
         }
     }
     
@@ -47,7 +47,7 @@ module.exports=class UserControllers{
                 throw new Error('error')
             }else res.status(201).json({user:response})
         }catch(e){
-            res.send(e.message)
+            res.send({message:e.message})
         }
     }
    static async user_controller_update(req,res){
@@ -69,7 +69,7 @@ module.exports=class UserControllers{
                 throw new Error('error')
             }else res.status(201).send('user was updated')
         }catch(e){
-            res.send(e.message)
+            res.send({message:e.message})
         }
     }
 
@@ -87,7 +87,7 @@ module.exports=class UserControllers{
                 throw new Error('error')
             }else res.status(201).send('user was deleted')
         }catch(e){
-            res.send(e.message)
+            res.send({message:e.message})
         }
     }
 }
