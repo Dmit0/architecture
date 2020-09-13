@@ -27,5 +27,5 @@ async function start(){
     }
 }
 start()
-module.export=app
+module.exports=app
 
