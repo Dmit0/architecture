@@ -16,20 +16,24 @@ module.exports=class UserControllers{
     
    static async user_controller_create(req,res){
         try{ 
+            
             const errors=validationResult(req)  
+            
             if(!errors.isEmpty()){
-                throw new Error('invalid data')
+                throw new Error("invalid data")
             }
-
+          
             const UserData={
                 name:req.body.name,
                 age:req.body.age
             }
-            const response = await userOperations.userCreate(UserData.name,UserData.age)
+           
+            
+            const response =  await userOperations.userCreate(UserData.name,UserData.age)
             if(!response){
                 throw new Error('error')
             }else 
-            res.status(201).send('user was created') 
+            res.status(201).send({message:'user was created'}) 
         }catch(e){
             res.status(400).send({message:e.message})
         }
@@ -37,13 +41,17 @@ module.exports=class UserControllers{
     
    static async user_controller_find(req,res){
         try{
-            const errors=validationResult(req)  
+            
+            const errors=validationResult(req) 
+            
             if(!errors.isEmpty()){
                 throw new Error('invalid data')
             }
-            UserName=req.query.name
+            const UserName=req.query.name
+            
+            
             const response = await userOperations.userFind(UserName)
-            if(response){
+            if(!response){
                 throw new Error('error')
             }else res.status(201).json({user:response})
         }catch(e){
