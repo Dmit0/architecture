@@ -1,44 +1,100 @@
-const {MongoClient} = require('mongodb');
+const UserModel=require('../schemas/user_model')
 const userOperations=require('./userOperationServise')
-
-//const {MockUserSeviceCreate}=require('./mock')
-
-jest.mock('findOne')
 
 describe('tests of services',()=>{
     describe('test with user services',()=>{
         
-        // let connection;
-        // let db;
+        const findUser={
+                   _id:'ahdskajfhdskhfa',
+                   name:'user1',
+                   age:'17'
+               }
+        const MyUser={
+            name:'user1',
+            age:17
+        }
 
-        // beforeAll(async () => {
-        //     connection = await MongoClient.connect(global.__MONGO_URI__, {
-        //       useNewUrlParser: true,
-        //     });
-        //     db = await connection.db(global.__MONGO_DB_NAME__);
-        //   });
+        describe('user create service',()=>{
 
-        //   afterAll(async () => {
-        //     await connection.close();
-        //     await db.close();
-        //   });
+            describe('user is not created cause of such user is exist',()=>{
+                jest.spyOn(UserModel, 'findOne').mockReturnValue(Promise.resolve(findUser))
+                test('should create a user',()=>{
+                    userOperations.userCreate(MyUser.name,MyUser.age)
+                    .then(result=>expect(result).not.toBeTruthy())
+                })
+            })
 
-        describe('user createservice',()=>{
+            describe('user created',()=>{
+                jest.spyOn(UserModel, 'findOne').mockReturnValue(Promise.resolve(false))
+                test('should create a user',()=>{
+                    userOperations.userCreate(MyUser.name,MyUser.age)
+                    .then( result=>expect(result).toBeTruthy())
+                })
+            })
            
-            test('should create a user',async()=>{
-                //const response = await userOperations.userCreate('qwert','23')
-                //console.log(response)
-                // const users = db.collection('users');
-                // const mockUser = {name: 'some-user-id', age: '123'};
-                // const insertedUser = await users.findOne({_id: 'some-user-id'});
+        })
+
+        describe('user find',()=>{
             
+            describe('user is not found ',()=>{
+                jest.spyOn(UserModel, 'findOne').mockReturnValue(Promise.resolve(false))
+                test('should create a user',()=>{
+                    userOperations.userCreate(MyUser.name)
+                    .then(result=>expect(result).toBeFalsy())
+                })
             })
-            
-            test('shouldnt create a user if such username exist',()=>{
-                //await userOperations.userCreate('qwert','23')
-                //const response1=await userOperations.userCreate('qwert','24')
-                //console.log(response1)
+
+            describe('user created',()=>{
+                jest.spyOn(UserModel, 'findOne').mockReturnValue(Promise.resolve(findUser))
+                test('should find a user',()=>{
+                    userOperations.userFind(MyUser.name)
+                    .then(result=>expect(result).toBe(findUser))
+                })
+            })           
+        })
+
+
+        describe('delete service',()=>{
+
+            describe('user is not found ',()=>{
+                jest.spyOn(UserModel, 'findOneAndDelete').mockReturnValue(Promise.resolve(false))
+                test('should create a user',()=>{
+                    userOperations.userCreate(MyUser.name)
+                    .then(result=>expect(result).toBeFalsy())
+                })
             })
+
+            describe('user is not deleted',()=>{
+                jest.spyOn(UserModel, 'findOneAndDelete').mockReturnValue(Promise.resolve(true))
+
+                test('should find a user',()=>{
+                    userOperations.userFind(MyUser.name)
+                    .then(result=>expect(result).toBeTruthy())
+                })
+            }) 
+
+        })
+
+
+
+        describe(' update service ',()=>{
+
+            describe('user is not found ',()=>{
+                jest.spyOn(UserModel, 'findOneAndDelete').mockReturnValue(Promise.resolve(false))
+                test('should create a user',()=>{
+                    userOperations.userCreate(MyUser.name)
+                    .then(result=>expect(result).toBeFalsy())
+                })
+            })
+
+            describe('user is updated',()=>{
+                jest.spyOn(UserModel, 'findOneAndUpdate').mockReturnValue(Promise.resolve(findUser))
+                test('should find a user',()=>{
+                    userOperations.userFind(MyUser.name)
+                    .then(result=>expect(result).toBe(findUser))
+                })
+            }) 
+
         })
     })
 })
