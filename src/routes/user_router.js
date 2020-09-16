@@ -3,7 +3,7 @@ const user_router=Router()
 
 const { body,query } = require('express-validator');
 
-const UserControllers=require('../controllers/user_contollers')
+const UserControllers=require('../controllers/user_controllers')
 
 user_router.post('/create',[
     body('name').notEmpty(),
